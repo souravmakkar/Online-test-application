@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.btn {
+  cursor: pointer;
+  border: none;
+  color: #fff;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background: #3385ff;
+}
+.btn-small {
+  background: #1a75ff;
+  padding: 8px;
+  font-size: 16px;
+}
+.btn-medium {
+  background: #1a75ff;
+  width: 50%;
+  margin: 20px auto;
+  font-size: 18px;
+  padding: 8px 10px;
+}
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+button:disabled:hover,
+.btn-primary:disabled:hover {
+  color: #fff;
+  border-color: #a0a0a0;
+  background-color: #a0a0a0;
+}
+
+.text-center {
+  text-align: center;
+}

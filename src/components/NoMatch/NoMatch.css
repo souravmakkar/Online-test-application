@@ -1,0 +1,22 @@
+.no-match {
+  text-align: center;
+  margin-top: 40px;
+}
+.no-match h3 {
+  color: red;
+  font-size: 40px;
+  padding: 5px;
+}
+.no-match p {
+  color: #1a83ff;
+  font-size: 24px;
+  font-weight: 400;
+}
+.no-match button {
+  color: red;
+  background-color: transparent;
+  border: none;
+  text-decoration: underline;
+  padding: 0;
+  font-size: 19px;
+}

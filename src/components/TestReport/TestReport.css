@@ -1,0 +1,51 @@
+/*  */
+
+.test-report-details {
+  background-color: #f5f5f5;
+  width: 740px;
+  height: 520px;
+  margin: 120px auto 90px auto;
+  padding: 20px;
+  border-left: 3px solid #1a83ff;
+  border-right: 3px solid #1a83ff;
+  border-radius: 2px 2px 2px 2px;
+}
+.heading {
+  text-align: center;
+  color: #1a83ff;
+}
+
+.remark {
+  text-align: center;
+  color: #ff3333;
+  font-size: 35px;
+}
+.score {
+  text-align: center;
+  color: #1a83ff;
+}
+.test-report-details ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  margin-top: -10px;
+}
+.test-report-details ul li {
+  width: 90%;
+  height: 60px;
+  padding: 0 10px;
+  margin-bottom: -10px;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+}
+.test-report-details ul li span {
+  margin-top: 6px;
+  height: 40px;
+  color: #ff3333;
+  font-weight: 700;
+}
+.test-report-details ul li p {
+  color: #1a83ff;
+  font-weight: 600;
+}

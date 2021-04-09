@@ -1,0 +1,79 @@
+.register_wrapper {
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2)),
+    url(https://images.unsplash.com/photo-1502945015378-0e284ca1a5be?ixid=MXwxMjA3fDB8MHxzZWFyY2h8N3x8d29ya3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+.register_card {
+  position: absolute;
+  top: 27%;
+  left: 27%;
+  width: 35%;
+  min-width: 300px;
+  padding: 10px 30px;
+  height: 330px;
+  border-radius: 10px;
+  background-color: white;
+  box-shadow: 0px 0px 8px #333336;
+}
+.register_card .title {
+  color: #1a75ff;
+  font-size: 26px;
+  font-weight: 400;
+  text-align: center;
+  margin: 2px 0;
+  text-transform: capitalize;
+}
+.register_card p {
+  color: #ff3333;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+  text-transform: capitalize;
+}
+.register_card .line {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border-bottom: 2px solid #1a83ff;
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  margin-bottom: 13px;
+}
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+.form-inputs .form-label {
+  display: block;
+  margin-left: 2px;
+  margin-bottom: 6px;
+  color: #222;
+}
+.form-inputs .input {
+  width: 93%;
+  padding: 7px 10px;
+  border-radius: 4px;
+  outline: none;
+  font-size: 14px;
+  border: 1px solid #d5d5db;
+  transition: all 0.3s ease;
+}
+.form-inputs .input::placeholder {
+  color: #757575;
+}
+.form-inputs .input:focus {
+  outline: none;
+  box-shadow: 1px 1px 3px #1a75ff, -1px -1px 3px #1a75ff;
+}
+.form-inputs .error-popup {
+  margin-top: 3px;
+  margin-bottom: -12px;
+  color: #ff3333;
+}
+

@@ -1,0 +1,49 @@
+.exam-info {
+  width: 60%;
+  margin: 80px auto 60px auto;
+  font-size: 17.1px;
+  font-weight: 440;
+}
+.exam-instructions .title {
+  margin-left: -30px;
+}
+
+.exam-instructions p {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.info-heading {
+  font-weight: 500;
+  font-size: 18px;
+  margin-bottom: -4px;
+}
+
+.exam-instructions ol li {
+  margin: 7px 0;
+}
+
+.info-checkbox {
+  margin-left: -40px;
+  margin-right: 5px;
+  margin-top: 2px;
+}
+.radio-group {
+  margin-top: -15px;
+  display: flex;
+  flex-direction: column;
+}
+.radio-group label {
+  margin: 2px;
+}
+
+.exam-info .btn-small {
+  /* background: #1a75ff;
+  padding: 8px;
+  font-size: 16px; */
+  margin: 10px 0 40px;
+}
+
+.exam-info .error {
+  color: #ff3333;
+}
