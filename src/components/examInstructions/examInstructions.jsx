@@ -4,11 +4,18 @@ import useValidate from '../../utilities/useValidate';
 import MemoizedHeader from '../header/header';
 import {levelType} from '../../utilities/constants';
 
+/**
+ * examInstructions component is used for rendering the exam instruction and select box for the level of a test. 
+ * @param {Object} history - It is an object which contains the push method which is used to push to particular
+ * page after clicking on button take test and passing the  level state to the test  page.    
+ *  
+ */
 function examInstructions({history}) {
 	const examInfo = {
-	agrementTerms:false,
-	skill:'',
+	agrementTerms : false,
+	skill: '',
 	};
+
 	const { values,handleChange,handleSubmit,errors,isSubmitted } = useValidate(examInfo);
 
 	useEffect(() => {

@@ -3,6 +3,11 @@ import './Timer.css';
 import {EXAM_TIME} from '../../utilities/constants';
 import PropTypes from 'prop-types';
 
+/**
+ * Timer component is used to render the timer on the page 
+ * @param {Function} submitTest - It is used to submit the test after the times up for a test
+ * @returns 
+ */
 
 const Timer = ({timesUp,submitTest}) => {
     const [ minutes, setMinutes ] = useState(EXAM_TIME);
@@ -54,5 +59,4 @@ Timer.propTypes={
 
 export default Timer;
 
-// export default Timer
 

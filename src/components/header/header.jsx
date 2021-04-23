@@ -6,7 +6,12 @@ import { memo } from "react";
 
 import {getUserInfo,isRegistered,cleanSession }from '../../utilities/services/authService';
 
-
+/**
+ * 
+ * Header component is used simple an pure component which is used to render an header component which contain
+ * an registered username and an signout link to for signout from the test.
+ *  
+ */
 function header() 
 {
 	const history = useHistory();

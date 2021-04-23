@@ -5,19 +5,29 @@ import SingleQuestion from '../singleQuestion/question'
 import { getQuestionsByLevel , countOfAttemptedQuestions } from '../../utilities/services/questionsService'; 
 import { saveTestState} from '../../utilities/services/authService';
 import Timer from '../Timer/Timer';
-import usePreventNaigatePage from '../../utilities/usePreventNaigatePage';
+import usePreventNavigatePage from '../../utilities/usePreventNavigatePage';
 
 import './onlineTest.css';
 
-function onlineTest({history,location}) {
+/**
+ * OnlineTest is used to represent the test page in which users see's the questions according to the level that
+ * user chooses and the timer that is running for the test and also contains the part of setting the state of 
+ * an particular question by selecting an particular option or not. 
+ * @param {Object} history -  In which the history object has a method which is used to send the state to ano
+ * ther page 
+ * 
+ * @param {Object} location - It is also an object which is used to get the state to particular location or the
+ * url
+ */
+
+function onlineTest({ history,location }) {
 	const [questionsList,setQuestionsList] = useState([]);
   const [currentQues, setCurrentQues] = useState(0);
 	const[timesUp,setTimesUp] = useState(false);
 
    const level = location.state['skillType'];
 
-	const [Prompt,setTestStart,testcomplete] = usePreventNaigatePage();
-
+	const [Prompt,setTestStart,testcomplete ] = usePreventNavigatePage();
 
 	function formatQuestion(ques) {
     const { title , options, multipleAns, answer } = ques;
@@ -34,6 +44,7 @@ function onlineTest({history,location}) {
       answer,
     };
   }
+	
 	
 	const submitWithoutAllQues =()=>{
 		setTimesUp(true);
@@ -94,7 +105,7 @@ function onlineTest({history,location}) {
 			...questions[currentQues].questionState,
 			seen:true,
 	}
-	if(currentQues ===0) return;
+	if(currentQues === 0) return;
 	else{
 		setCurrentQues(currentQues-1)
 	}
@@ -107,7 +118,7 @@ function onlineTest({history,location}) {
 			seen:true,
 		}
 		if(currentQues >= questionsList.length) return;
-		setCurrentQues(currentQues +1);
+		setCurrentQues(currentQues + 1);
 	}
 
 	useEffect(()=>{
@@ -125,6 +136,7 @@ function onlineTest({history,location}) {
 		
  const handleOptionsChange = (event , choiceIndex , quesIndex)=>
 {
+	console.log(quesIndex);
 	const selected = event.target.checked;
 	if(event.target.type === "radio")
 	{
@@ -213,7 +225,7 @@ return (
 					<SingleQuestion
 					totalQuestions={questionsList.length}
 					question={{...questionsList[currentQues]}}
-					quesNo={currentQues +1 }
+					quesNo={currentQues + 1 }
 					quesIndex={currentQues}
 					optionClick={handleOptionsChange}
 				/>
@@ -236,14 +248,14 @@ return (
 		</div>
 	</div>
 	<div className='side-panel-container'>
-	<Timer timesUp={timesUp} submitTest={submitWithoutAllQues} setTimesUp={setTimesUp}/>
+	<Timer timesUp={timesUp} submitTest={submitWithoutAllQues} />
 				<div className='side-panel'>
 							<ul>
 								{	showQuestionsOnSidePanel(questionsList)}
 							</ul>
 				</div>
 		</div>	
-		{Prompt}
+		{!timesUp && Prompt}
 	</div>
 	)
 }

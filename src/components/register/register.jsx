@@ -4,8 +4,13 @@ import{ registerUser} from '../../utilities/services/authService';
 import useValidate from '../../utilities/useValidate';
 import MemoizedHeader from '../header/header';
 
-function register({history}) {
+/**
+ * Register component is used for register a user for a test with details
+ * @param {Object} history - It is basically an object which contains the push method which is used to navigate
+ * the user to another page after the registration. 
+ */
 
+function register({history}) {
 	const emp_details={
     empName: "",
     empId: "",

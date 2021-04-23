@@ -9,6 +9,13 @@ import MemoizedHeader from '../header/header';
 import './TestReport.css';
 import Confetti from 'react-confetti';
 
+/**
+ * Test Report component is used to represent the test report page with test analysis of how many questions
+ * user attempted,correct,incorrect and partially correct as well. 
+ * @param {Object} location - It is used to get the question attempted state for the test report page 
+ * @returns 
+ */
+
 function TestReport({ location}) {
 
 	const[showConfetti,setShowConfetti] = useState(false);
