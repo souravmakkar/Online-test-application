@@ -6,10 +6,8 @@ function usePreventNaigatePage() {
   const [isChanged, setIsChanged] = useState(false);
 
   useEffect(() => {
-    window.onbeforeunload = (event) => {
+    window.onbeforeunload = () => {
       // event.preventDefault();
-      console.log(event);
-      console.log(event.target);
       return message;
     };
     return () => {
