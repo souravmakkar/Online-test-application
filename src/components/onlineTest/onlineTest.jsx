@@ -45,6 +45,11 @@ function onlineTest({ history,location }) {
     };
   }
 	
+	const getQuesState = (question,quesNo)=>{
+	if(currentQues === quesNo) return 'current-ques'
+  else if(question.questionState['seen']) return 'seen-ques'
+	else return ''
+	}
 	
 	const submitWithoutAllQues =()=>{
 		setTimesUp(true);
@@ -136,7 +141,6 @@ function onlineTest({ history,location }) {
 		
  const handleOptionsChange = (event , choiceIndex , quesIndex)=>
 {
-	console.log(quesIndex);
 	const selected = event.target.checked;
 	if(event.target.type === "radio")
 	{
@@ -190,8 +194,9 @@ function onlineTest({ history,location }) {
 const showQuestionsOnSidePanel=(questionsList)=>
 {
 	const listItems =	questionsList.map((question,index) => {
-						return	(<li key={question['title']}
-							onClick={ () =>navigateToQuestion(index)}	>
+						return	(<li key={question['title'] }
+						className ={`question-button ${getQuesState(question,index)}`}
+							onClick={ () => navigateToQuestion(index)}	>
 								<label>		
 									{index +1}
 								</label>
@@ -216,11 +221,11 @@ const showQuestionsOnSidePanel=(questionsList)=>
 		}
 
 return (
-		<div className='test-page'>
-			<div className='questions'>
-		{		
-		questionsList.length > 0
-      && 
+	<div className='test-page'>
+		<div className='questions'>
+			{		
+			questionsList.length > 0
+				&& 
 				<>
 					<SingleQuestion
 					totalQuestions={questionsList.length}
@@ -249,13 +254,17 @@ return (
 	</div>
 	<div className='side-panel-container'>
 	<Timer timesUp={timesUp} submitTest={submitWithoutAllQues} />
-				<div className='side-panel'>
-							<ul>
+	{!timesUp && Prompt}
+			<div className='side-panel'>
+						<ul>
 								{	showQuestionsOnSidePanel(questionsList)}
-							</ul>
-				</div>
+						</ul>
+			</div>
+			<div className="question-state">
+				<h4 className='state-heading'><span className='current'></span> Current Question</h4>
+				<h4 className='state-heading'><span className='seen'></span> Seen Question</h4>
+			</div>
 		</div>	
-		{!timesUp && Prompt}
 	</div>
 	)
 }
