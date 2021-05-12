@@ -14,48 +14,52 @@ import onlineTest from './components/onlineTest/onlineTest';
 import TestReport from './components/TestReport/TestReport';
 import NoMatch from './components/NoMatch/NoMatch';
 import { getTestState, isRegistered } from './utilities/services/authService';
+import { ThemeProvider } from './utilities/ThemeManager';
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route
-          exact
-          path={['/', '/register']}
-          render={(props) => {
-            if (isRegistered()) return <Redirect to="/exam-info" {...props} />;
-            else {
-              return <Register {...props} />;
-            }
-          }}
-        />
-        <Route
-          exact
-          path="/exam-info"
-          render={(props) => {
-            if (isRegistered()) return <ExamInstructions {...props} />;
-            else {
-              return <Redirect to="/register" />;
-            }
-          }}
-        />
-        <ProtectedRoute path="/online/test" component={onlineTest} />
-        <Route
-          exact
-          path="/test/report"
-          render={(props) => {
-            if (getTestState()) {
-              return <TestReport {...props} />;
-            } else if (!isRegistered()) {
-              return <Redirect to="/register" />;
-            } else {
-              return <Redirect to="/exam-info" />;
-            }
-          }}
-        />
-        <Route render={() => <NoMatch />} />
-      </Switch>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <Switch>
+          <Route
+            exact
+            path={['/', '/register']}
+            render={(props) => {
+              if (isRegistered())
+                return <Redirect to='/exam-info' {...props} />;
+              else {
+                return <Register {...props} />;
+              }
+            }}
+          />
+          <Route
+            exact
+            path='/exam-info'
+            render={(props) => {
+              if (isRegistered()) return <ExamInstructions {...props} />;
+              else {
+                return <Redirect to='/register' />;
+              }
+            }}
+          />
+          <ProtectedRoute path='/online/test' component={onlineTest} />
+          <Route
+            exact
+            path='/test/report'
+            render={(props) => {
+              if (getTestState()) {
+                return <TestReport {...props} />;
+              } else if (!isRegistered()) {
+                return <Redirect to='/register' />;
+              } else {
+                return <Redirect to='/exam-info' />;
+              }
+            }}
+          />
+          <Route render={() => <NoMatch />} />
+        </Switch>
+      </Router>
+    </ThemeProvider>
   );
 }
 
