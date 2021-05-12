@@ -1,10 +1,13 @@
-/*  */
-
+.test-report-details-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 130px 0;
+}
 .test-report-details {
   background-color: #f5f5f5;
   width: 740px;
   height: 520px;
-  margin: 120px auto 90px auto;
   padding: 20px;
   border-left: 3px solid #1a83ff;
   border-right: 3px solid #1a83ff;
@@ -48,4 +51,26 @@
 .test-report-details ul li p {
   color: #1a83ff;
   font-weight: 600;
+}
+/* For night mode */
+
+.test-report-details-wrapper.night {
+  background-color: #212121;
+}
+.test-report-details-wrapper.night .test-report-details {
+  background-color: #3f4042;
+  border-left: 4px solid #646161;
+  border-right: 4px solid #646161;
+}
+.test-report-details-wrapper.night .heading {
+  color: #fff;
+}
+.test-report-details-wrapper.night .test-report-details ul li p {
+  color: rgba(247, 246, 246, 0.7);
+}
+.test-report-details-wrapper.night .remark {
+  color: rgba(208, 207, 207, 0.7);
+}
+.test-report-details-wrapper.night .score {
+  color: #fff;
 }

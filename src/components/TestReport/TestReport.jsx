@@ -1,5 +1,7 @@
-import React,{useState,useEffect,useRef} from 'react';
+import React,{useState,useEffect,useRef,useContext} from 'react';
 import { useHistory } from "react-router-dom";
+import { ThemeContext } from '../../utilities/ThemeManager';
+
 
 import PropTypes from 'prop-types';
 import { getCountOfCorrectAnswers,countOfAttemptedQuestions } from '../../utilities/services/questionsService';
@@ -18,9 +20,12 @@ import Confetti from 'react-confetti';
 
 function TestReport({ location}) {
 
+	const {darkTheme} = useContext(ThemeContext);
+	
 	const[showConfetti,setShowConfetti] = useState(false);
 	const [testDetails,setTestDetails]= useState({});
 	const [downloadFile,setDownloadFile] = useState();
+	
 	const width='1500px';
 	const height='900px';
 	const confettiRef = useRef(null);
@@ -113,7 +118,8 @@ function TestReport({ location}) {
 				</div>
 				)
 				}
-			<div className='test-report-details'>
+		<div className ={`test-report-details-wrapper ${darkTheme ? 'night':''}`}>	
+			<div className={`test-report-details ${darkTheme ? 'night':''}`}>
 				<h1 className='heading'>Test Result</h1>
 				<h1 className='remark'>{testDetails['remark']}</h1>
 				<h1 className='score'>Score is :{testDetails['score']}</h1>
@@ -136,6 +142,7 @@ function TestReport({ location}) {
 				</div>
 		</div>	
 	</div>	
+</div>		
 	)
 }
 

@@ -1,8 +1,11 @@
 .exam-info {
-  width: 60%;
-  margin: 80px auto 60px auto;
+  padding: 60px 0px 10px 0;
   font-size: 17.1px;
   font-weight: 440;
+}
+.exam-instructions {
+  width: 70%;
+  margin: auto;
 }
 .exam-instructions .title {
   margin-left: -30px;
@@ -22,9 +25,22 @@
 .exam-instructions ol li {
   margin: 7px 0;
 }
+.exam-mandatry-info {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.exam-mandatry-info .agrement-line {
+  display: block;
+  position: absolute;
+  left: 12%;
+}
+.skill-set {
+  padding-top: 10px;
+}
 
 .info-checkbox {
-  margin-left: -40px;
+  margin-left: 40px;
   margin-right: 5px;
   margin-top: 2px;
 }
@@ -38,12 +54,15 @@
 }
 
 .exam-info .btn-small {
-  /* background: #1a75ff;
-  padding: 8px;
-  font-size: 16px; */
   margin: 10px 0 40px;
 }
 
 .exam-info .error {
   color: #ff3333;
+}
+
+/* For night */
+.exam-info.night {
+  background-color: #212121;
+  color: #fff;
 }

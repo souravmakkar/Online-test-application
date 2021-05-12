@@ -1,8 +1,10 @@
-import React,{useEffect} from 'react';
+import React,{useEffect,useContext} from 'react';
 import './examInstructions.css';
 import useValidate from '../../utilities/useValidate';
 import MemoizedHeader from '../header/header';
 import {levelType} from '../../utilities/constants';
+import { ThemeContext } from '../../utilities/ThemeManager';
+import { saveLevel } from'../../utilities/services/authService';
 
 /**
  * examInstructions component is used for rendering the exam instruction and select box for the level of a test. 
@@ -11,25 +13,25 @@ import {levelType} from '../../utilities/constants';
  *  
  */
 function examInstructions({history}) {
+	const {darkTheme} = useContext(ThemeContext);
 	const examInfo = {
 	agrementTerms : false,
 	skill: '',
 	};
 
+
 	const { values,handleChange,handleSubmit,errors,isSubmitted } = useValidate(examInfo);
 
 	useEffect(() => {
 			if (Object.keys(errors).length === 0 && isSubmitted ) {
-				history.push({
-        pathname:'/online/test', 
-				state:{ 'skillType' : values['skill']}
-				});
+				saveLevel(values['skill']);
+				history.push('/online/test');
 			}},[errors])
 
 	return (
 		<>
 		<MemoizedHeader/>
-		<div className='exam-info'>
+		<div className={`exam-info ${darkTheme ? 'night':''}`}>
 				<div className="exam-instructions">
 					<p className='title'>Basic Instructions for Online Examinations:</p>
 					<p className='info-heading'>A. General information:</p>
@@ -58,12 +60,14 @@ function examInstructions({history}) {
 							<li>Total time for the exam is <strong>10 minutes.</strong> </li>
 					</ol>
 				</div>
-			<div className='exam-mandatry-info'>
-					<input type='checkbox' id='agrement'className='info-checkbox' name='agrementTerms' checked={values['agrementTerms']}  onChange={handleChange} />
-					<label htmlFor='agrement'>I agree to all the terms and conditions. </label>
+			<div className='exam-mandatry-info text-center'>
+				<div className="agrement-line">
+						<input type='checkbox' id='agrement'className='info-checkbox' name='agrementTerms' checked={values['agrementTerms']}  onChange={handleChange} />
+						<label htmlFor='agrement'>I agree to all the terms and conditions. </label>
+					</div>
 					{errors.agrementTerms && <span className='error'>{errors.agrementTerms}</span>}
 
-				<div className='skill-set text-center'>
+				<div className='skill-set'>
           <h4>Choose your skill level acc. to your knowledge</h4>
 						<div className='radio-group'>
 								<label htmlFor='skill1'>
@@ -86,7 +90,7 @@ function examInstructions({history}) {
 								</label>
 							</div>
 							{errors.skill && <span className='error'>{errors.skill}</span>}
-				</div>	
+				</div>
 
 				</div>
 				<div className='text-center'>
@@ -97,4 +101,5 @@ function examInstructions({history}) {
 	)
 }
 
-export default examInstructions
+export default examInstructions;
+

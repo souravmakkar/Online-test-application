@@ -1,5 +1,6 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import './question.css';
+import { ThemeContext } from '../../utilities/ThemeManager';
 import PropTypes from 'prop-types';
 
 /**
@@ -22,6 +23,7 @@ import PropTypes from 'prop-types';
 function SingleQuestion(props) {
 const { quesNo, quesIndex, optionClick, question,totalQuestions} = props;
 const { title , options , multipleAns } = question;
+const {darkTheme} = useContext(ThemeContext);
 	
 const showOptions = (choices,multipleAns) => {
 		if(multipleAns)
@@ -70,7 +72,7 @@ const showOptions = (choices,multipleAns) => {
 }
 
 	return (
-		<div className='question-container'>
+		<div className={`question-container ${darkTheme ? 'night':''}`}>
 			<div className='question'>
 				<div className='question-no'>Q -<span> {quesNo} </span> of {totalQuestions}</div>
 				<h3>{title}</h3>
