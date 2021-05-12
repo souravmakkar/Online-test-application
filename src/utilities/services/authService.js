@@ -22,10 +22,27 @@ function saveTestState(testState) {
   };
   localStorage.setItem(sessionToken, JSON.stringify(newSession));
 }
+function saveLevel(skillLevel) {
+  const oldSession = JSON.parse(localStorage.getItem(sessionToken));
+  const newSession = {
+    ...oldSession,
+    level: skillLevel,
+  };
+  localStorage.setItem(sessionToken, JSON.stringify(newSession));
+}
+
+function getSelectedLevel() {
+  const oldSession = JSON.parse(localStorage.getItem(sessionToken));
+  return oldSession['level'];
+}
+
+function removeTheme() {
+  localStorage.removeItem('darkTheme');
+}
 
 const isRegistered = () => {
   const tokenInfo = JSON.parse(localStorage.getItem(sessionToken));
-  if (tokenInfo || tokenInfo === 'null' || tokenInfo === 'undefined') {
+  if (tokenInfo) {
     return true;
   } else {
     return false;
@@ -53,4 +70,7 @@ export {
   cleanSession,
   getTestState,
   saveTestState,
+  saveLevel,
+  getSelectedLevel,
+  removeTheme,
 };

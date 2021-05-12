@@ -1,13 +1,14 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
 import SingleQuestion from '../singleQuestion/question'
-import { getQuestionsByLevel , countOfAttemptedQuestions } from '../../utilities/services/questionsService'; 
-import { saveTestState} from '../../utilities/services/authService';
+import { getQuestionsByLevel , countOfAttemptedQuestions,storeQuestionState,getUpdatedQuestionState, removeQuestionState, getUpdatedCurrentQues } from '../../utilities/services/questionsService'; 
+import { saveTestState,getSelectedLevel} from '../../utilities/services/authService';
 import Timer from '../Timer/Timer';
-import usePreventNavigatePage from '../../utilities/usePreventNavigatePage';
+import { ThemeContext } from '../../utilities/ThemeManager';
 
 import './onlineTest.css';
+import Toggle from '../Toggle/Toggle';
 
 /**
  * OnlineTest is used to represent the test page in which users see's the questions according to the level that
@@ -16,20 +17,18 @@ import './onlineTest.css';
  * @param {Object} history -  In which the history object has a method which is used to send the state to ano
  * ther page 
  * 
- * @param {Object} location - It is also an object which is used to get the state to particular location or the
- * url
  */
 
-function onlineTest({ history,location }) {
+function onlineTest({history}) {
 	const [questionsList,setQuestionsList] = useState([]);
+	const [updatedQuestion,setUpdatedQuestion] = useState([]);
   const [currentQues, setCurrentQues] = useState(0);
 	const[timesUp,setTimesUp] = useState(false);
+	const {darkTheme} = useContext(ThemeContext);
+	const[quizTime,setQuizTime] = useState(600);
+	let interval =null;
 
-   const level = location.state['skillType'];
-
-	const [Prompt,setTestStart,testcomplete ] = usePreventNavigatePage();
-
-	function formatQuestion(ques) {
+	const formatQuestion=(ques)=>{
     const { title , options, multipleAns, answer } = ques;
 
     const mapOptions = options.map((option) => {
@@ -43,22 +42,81 @@ function onlineTest({ history,location }) {
       questionState: { answered: false, seen: false },
       answer,
     };
-  }
+  }	
 	
+	useEffect(()=>{
+		JSON.parse(localStorage.getItem('timerState')) ? 
+			setQuizTime(localStorage.getItem('timerState')):
+			quizTime
+			}, []);
+
+	useEffect(()=>{
+		localStorage.setItem('timerState',quizTime);
+		},[quizTime])
+
+	useEffect(()=>{
+		interval = setInterval(() => {
+			if(quizTime > 0){
+				setQuizTime(quizTime-1)
+			}
+			else{
+				setTimesUp(true)
+				setQuizTime(-1);
+				}
+				}, 1000);
+			return ()=> {
+						clearInterval(interval);
+						localStorage.removeItem('timerState')
+			};
+	});
+	
+
+	const initialQuestions =() =>{
+		let questions = getQuestionsByLevel(getSelectedLevel());
+				const filteredQuestions = [];
+				questions.forEach((q) => {
+					const formattedQues = formatQuestion(q);
+					filteredQuestions.push(formattedQues);
+				});
+				setQuestionsList(filteredQuestions);
+	}
+	useEffect(()=>{
+		if(JSON.parse(localStorage.getItem('questionState')))
+		{
+			setQuestionsList(getUpdatedQuestionState());
+			setCurrentQues(getUpdatedCurrentQues());
+		}
+		else {
+			initialQuestions();
+		}
+	}, []);
+
+		useEffect(()=>{
+			if(questionsList){
+					storeQuestionState(questionsList,currentQues);
+				}
+		},[questionsList,currentQues])
+
+		useEffect(()=>{
+					setUpdatedQuestion(getUpdatedQuestionState());
+		},[questionsList])
+
+
 	const getQuesState = (question,quesNo)=>{
-	if(currentQues === quesNo) return 'current-ques'
-  else if(question.questionState['seen']) return 'seen-ques'
-	else return ''
+		if(currentQues === quesNo) return 'current-ques'
+		else if(question.questionState['answered']) return 'answered-ques';
+		else if(question.questionState['seen']) return 'unanswered-ques';
+		else return 'unseen-ques'
 	}
 	
 	const submitWithoutAllQues =()=>{
-		setTimesUp(true);
 		saveTestState(true);
 		swal("Test is submitted succesfully!", {
 			icon: "success",
 		}).then((afterSubmit)=>{
 			if(afterSubmit)
 			{
+				removeQuestionState()
 				history.replace({
 					pathname:'/test/report',
          state:{ 'questionState' : questionsList}
@@ -86,7 +144,7 @@ function onlineTest({ history,location }) {
 					});
 					setTimesUp(true);
 					saveTestState(true);
-					testcomplete();
+					removeQuestionState();
 					history.replace({
 					pathname:'/test/report',
 					state:{'questionState':questionsList}
@@ -99,7 +157,6 @@ function onlineTest({ history,location }) {
     });
 	}
 	else{
-		testcomplete();
 		submitWithoutAllQues();
 	}
    }
@@ -124,20 +181,25 @@ function onlineTest({ history,location }) {
 		}
 		if(currentQues >= questionsList.length) return;
 		setCurrentQues(currentQues + 1);
+		storeQuestionState(questionsList,currentQues);
 	}
 
-	useEffect(()=>{
-		setTestStart();
-		let questions = getQuestionsByLevel(level);
-				const filteredQuestions = [];
-				questions.forEach((q) => {
-					const formattedQues = formatQuestion(q);
-					filteredQuestions.push(formattedQues);
-				});
-		
-				setQuestionsList(filteredQuestions);
-			}, []);
-
+	const checkOthersAnswered =(options, currentOptionIndex)=> {
+		return options.filter((ch, index) => index !== currentOptionIndex && ch.selected).length;
+  }
+	const navigateToQuestion = (quesNo) =>{
+			const questions = questionsList;
+			questions[currentQues].questionState = {
+				...questions[currentQues].questionState,
+				seen:true
+			}
+			questions[quesNo].questionState = {
+				...questions[quesNo].questionState,
+				seen:true
+			}
+			setCurrentQues(quesNo);
+			storeQuestionState(questionsList,currentQues);
+		}
 		
  const handleOptionsChange = (event , choiceIndex , quesIndex)=>
 {
@@ -153,8 +215,11 @@ function onlineTest({ history,location }) {
 					...questionsList[quesIndex].options.slice(0,choiceIndex).map((option)=>{
 						return { ...option,selected:false }
 						}),
-						{...questionsList[quesIndex]['options'][choiceIndex], selected:true },
-						...questionsList[quesIndex].options.slice(choiceIndex + 1).map((option)=>{
+						{
+							...questionsList[quesIndex]['options'][choiceIndex], selected:true 
+						},
+						...questionsList[quesIndex].options.slice(choiceIndex + 1)
+						.map((option)=>{
 								return { ...option, selected: false };
 							})					
 					],
@@ -166,6 +231,7 @@ function onlineTest({ history,location }) {
 		},
 				...questionsList.slice(quesIndex+1)
 		])
+		storeQuestionState(questionsList,currentQues);
 	}
 	else
 	{
@@ -183,11 +249,12 @@ function onlineTest({ history,location }) {
 				],
 				questionState:{
 					...questionsList[quesIndex].questionState,
-					answered: selected
+					answered:  checkOthersAnswered(questionsList[quesIndex].options, choiceIndex) ||selected
 				}
 			},
 			...questionsList.slice(quesIndex + 1)
 		])	
+		storeQuestionState(questionsList,currentQues);
 	}
  }
 
@@ -205,31 +272,16 @@ const showQuestionsOnSidePanel=(questionsList)=>
 			return listItems;
 }
 
-	const navigateToQuestion =(quesNo)=>{
-	const questions = questionsList;
-
-	questions[currentQues].questionState = {
-		...questions[currentQues].questionState,
-		seen:true
-	}
-
-	questions[quesNo].questionState = {
-		...questions[quesNo].questionState,
-		seen:true
-	}
-	setCurrentQues(quesNo);
-		}
-
 return (
-	<div className='test-page'>
+	<div className={`test-page ${darkTheme ? 'night':'' }`}>
 		<div className='questions'>
 			{		
-			questionsList.length > 0
+			updatedQuestion.length > 0
 				&& 
 				<>
 					<SingleQuestion
 					totalQuestions={questionsList.length}
-					question={{...questionsList[currentQues]}}
+					question={{...updatedQuestion[currentQues]}}
 					quesNo={currentQues + 1 }
 					quesIndex={currentQues}
 					optionClick={handleOptionsChange}
@@ -253,16 +305,17 @@ return (
 		</div>
 	</div>
 	<div className='side-panel-container'>
-	<Timer timesUp={timesUp} submitTest={submitWithoutAllQues} />
-	{!timesUp && Prompt}
+		<Toggle/>	
+		<Timer quizTime = {quizTime} timesUp = {timesUp} submitTest={submitWithoutAllQues} />
 			<div className='side-panel'>
 						<ul>
 								{	showQuestionsOnSidePanel(questionsList)}
 						</ul>
 			</div>
 			<div className="question-state">
-				<h4 className='state-heading'><span className='current'></span> Current Question</h4>
-				<h4 className='state-heading'><span className='seen'></span> Seen Question</h4>
+				<h4 className='state-heading'><span className='current'></span> Current Q.</h4>
+				<h4 className='state-heading'><span className='unanswered'></span>Unanswered Q.</h4>
+				<h4 className='state-heading'><span className='answered'></span>Answered Q.</h4>
 			</div>
 		</div>	
 	</div>

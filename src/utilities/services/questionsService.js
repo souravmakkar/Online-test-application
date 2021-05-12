@@ -9,15 +9,36 @@ function countOfAttemptedQuestions(questionsList) {
   return quesAttempt;
 }
 
+function storeQuestionState(questionList, currentQues) {
+  localStorage.setItem(
+    'questionState',
+    JSON.stringify({
+      currentQues: currentQues,
+      questions: [...questionList],
+    })
+  );
+}
+function getUpdatedQuestionState() {
+  let updatedState = JSON.parse(localStorage.getItem('questionState'));
+  return updatedState['questions'];
+}
+
+function removeQuestionState() {
+  localStorage.removeItem('questionState');
+}
+
+function getUpdatedCurrentQues() {
+  let updatedState = JSON.parse(localStorage.getItem('questionState'));
+  return updatedState['currentQues'];
+}
+
 function isQuestionAnswered(options) {
   let quesCount = false;
-
   options.forEach((option) => {
     if (option.selected) {
       quesCount = true;
     }
   });
-
   return quesCount;
 }
 
@@ -71,4 +92,8 @@ export {
   getQuestionsByLevel,
   countOfAttemptedQuestions,
   getCountOfCorrectAnswers,
+  storeQuestionState,
+  getUpdatedQuestionState,
+  removeQuestionState,
+  getUpdatedCurrentQues,
 };
