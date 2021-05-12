@@ -41,7 +41,7 @@ const Timer = ({timesUp,submitTest,quizTime}) => {
 Timer.propTypes={
 	timesUp:PropTypes.bool.isRequired,
 	submitTest:PropTypes.func.isRequired,
-	quizTime:PropTypes.number.isRequired
+	quizTime:PropTypes.any.isRequired
 }
 
 export default Timer;
